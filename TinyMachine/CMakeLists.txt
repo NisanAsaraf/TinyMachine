@@ -3,7 +3,7 @@
 #
 
 # Add source to this project's executable.
-add_executable (TinyMachine "TinyMachine.cpp" "TinyMachine.h")
+add_executable (TinyMachine "TinyMachine.cpp" "TinyMachine.h" "OpCodes.cpp" "OpCodes.h")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET TinyMachine PROPERTY CXX_STANDARD 20)

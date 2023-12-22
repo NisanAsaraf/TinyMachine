@@ -1,12 +1,16 @@
-﻿// TinyMachine.cpp : Defines the entry point for the application.
-//
-
-#include "TinyMachine.h"
-
+﻿#include "TinyMachine.h"
 using namespace std;
 
-int main()
+namespace tiny_machine
 {
-	cout << "Hello CMake." << endl;
-	return 0;
+	class Instructions
+	{
+
+	};
+
+	int main()
+	{
+		cout << "Hello CMake." << endl;
+		return 0;
+	}
 }
