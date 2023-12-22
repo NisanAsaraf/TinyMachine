@@ -15,7 +15,8 @@ bool Instructions::POP(std::stack<uint32_t>& a_stack)
 
 bool Instructions::PUSH(std::stack<uint32_t>& a_stack, uint32_t a_data)
 {
-
+	a_stack.push(a_data);
+	return 1;
 }
 
 bool Instructions::DUP(std::stack<uint32_t>& a_stack)
@@ -24,6 +25,7 @@ bool Instructions::DUP(std::stack<uint32_t>& a_stack)
 	{
 		return 0;
 	}
+
 	a_stack.push(a_stack.top());
 	return 1;
 }
@@ -34,6 +36,7 @@ bool Instructions::ADD(std::stack<uint32_t>& a_stack)
 	{
 		return 0;
 	}
+
 	uint32_t tmp = a_stack.top();
 	a_stack.pop();
 	a_stack.push(tmp + a_stack.top());
@@ -46,6 +49,7 @@ bool Instructions::SUB(std::stack<uint32_t>& a_stack)
 	{
 		return 0;
 	}
+
 	uint32_t tmp = a_stack.top();
 	a_stack.pop();
 	a_stack.push(tmp - a_stack.top());
@@ -125,20 +129,32 @@ bool Instructions::PRINTC(std::stack<uint32_t>& a_stack)
 
 bool Instructions::NOP()
 {
-
+	return 1;
 }
 
 bool Instructions::HALT()
 {
-
+	return 1;
 }
 
 bool Instructions::INC(std::stack<uint32_t>& a_stack)
 {
-
+	if (a_stack.empty())
+	{
+		return 0;
+	}
+	uint32_t tmp = a_stack.top();
+	a_stack.pop();
+	a_stack.push(++tmp);
 }
 
 bool Instructions::DEC(std::stack<uint32_t>& a_stack)
 {
-
+	if (a_stack.empty())
+	{
+		return 0;
+	}
+	uint32_t tmp = a_stack.top();
+	a_stack.pop();
+	a_stack.push(--tmp);
 }
