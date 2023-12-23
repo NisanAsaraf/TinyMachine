@@ -128,15 +128,7 @@ namespace tiny_machine
     {
         for (uint32_t val : v_bits)
         {
-            std::cout << val;
-            if (!v_bits.empty())
-            {
-                std::cout << ", ";
-            }
-            else
-            {
-                std::cout << std::endl;
-            }
+            std::cout << val << std::endl;          
         }
     }
 
