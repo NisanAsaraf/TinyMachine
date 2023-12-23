@@ -4,93 +4,134 @@ using namespace std;
 
 namespace tiny_machine
 {
+    TinyMachine::TinyMachine()
+    {
+        opcodes = createOpCodesMap();
+    }
+
 	std::stack<uint32_t>& TinyMachine::getStack()
 	{
 		return v_stack;
 	}
 
-	bool TinyMachine::Command(InsCode a_code, uint32_t a_value)
-	{
+    uint32_t TinyMachine::GetMSB(uint32_t a_val)
+    {
+        return a_val >> 30;
+    }
+
+    bool TinyMachine::CommandWithArgument(uint32_t a_opcode, uint32_t a_value)
+    {
         bool success;
-        switch (a_code) 
+        Codes code = static_cast<Codes>(a_opcode);
+
+        switch (code)
         {
-        case InsCode::POP:
-            success = v_instructions.POP(v_stack);
-            break;
-        case InsCode::PUSH:
+        case Codes::PUSH:
             success = v_instructions.PUSH(v_stack, a_value);
             break;
-        case InsCode::DUP:
+        default:
+            success = 0;
+            break;
+        }
+        return success;
+    }
+
+    bool TinyMachine::CommandWithNoArgument(uint32_t a_opcode)
+    {
+        bool success;
+        Codes code = static_cast<Codes>(a_opcode);
+
+        switch (code)
+        {
+        case Codes::POP:
+            success = v_instructions.POP(v_stack);
+            break;
+        case Codes::DUP:
             success = v_instructions.DUP(v_stack);
             break;
-        case InsCode::ADD:
+        case Codes::ADD:
             success = v_instructions.ADD(v_stack);
             break;
-        case InsCode::SUB:
+        case Codes::SUB:
             success = v_instructions.SUB(v_stack);
             break;
-        case InsCode::MUL:
+        case Codes::MUL:
             success = v_instructions.MUL(v_stack);
             break;
-        case InsCode::DIV:
+        case Codes::DIV:
             success = v_instructions.DIV(v_stack);
             break;
-        case InsCode::SWAP:
+        case Codes::SWAP:
             success = v_instructions.SWAP(v_stack);
             break;
-        case InsCode::PRINT:
+        case Codes::PRINT:
             success = v_instructions.PRINT(v_stack);
             break;
-        case InsCode::PRINTC:
+        case Codes::PRINTC:
             success = v_instructions.PRINTC(v_stack);
             break;
-        case InsCode::NOP:
+        case Codes::NOP:
             success = v_instructions.NOP();
             break;
-        case InsCode::HALT:
+        case Codes::HALT:
             success = v_instructions.HALT();
             break;
-        case InsCode::INC:
+        case Codes::INC:
             success = v_instructions.INC(v_stack);
             break;
-        case InsCode::DEC:
+        case Codes::DEC:
             success = v_instructions.DEC(v_stack);
             break;
         default:
             success = 0;
             break;
-		}
+        }
         return success;
+    }
+
+	bool TinyMachine::Command(uint32_t a_opcode, uint32_t a_value)
+	{
+        uint32_t MSB = GetMSB(a_opcode);
+        if (MSB == 1) //no argument 01
+        {
+            return CommandWithNoArgument(a_opcode);
+        }
+        else if (MSB == 2) // with argument 10
+        {
+            return CommandWithArgument(a_opcode, a_value);
+        }
+
+        return 0;
 	}
 
     void test1()
     {
         TinyMachine tm;
-        tm.Command(InsCode::PUSH, 12);
-        tm.Command(InsCode::PRINT);
+        tm.Command(tm.opcodes["PUSH"], 12);
+        tm.Command(tm.opcodes["PRINT"]);
 
-        tm.Command(InsCode::PUSH, 8);
-        tm.Command(InsCode::PRINT);
+        tm.Command(tm.opcodes["PUSH"], 8);
+        tm.Command(tm.opcodes["PRINT"]);
 
-        tm.Command(InsCode::DUP);
-        tm.Command(InsCode::PRINT);
+        tm.Command(tm.opcodes["DUP"]);
+        tm.Command(tm.opcodes["PRINT"]);
 
-        tm.Command(InsCode::INC);
-        tm.Command(InsCode::PRINT);
+        tm.Command(tm.opcodes["INC"]);
+        tm.Command(tm.opcodes["PRINT"]);
 
-        tm.Command(InsCode::INC);
-        tm.Command(InsCode::PRINT);
+        tm.Command(tm.opcodes["INC"]);
+        tm.Command(tm.opcodes["PRINT"]);
 
-        tm.Command(InsCode::MUL);
-        tm.Command(InsCode::PRINT);
+        tm.Command(tm.opcodes["MUL"]);
+        tm.Command(tm.opcodes["PRINT"]);
 
-        tm.Command(InsCode::SUB);
-        tm.Command(InsCode::PRINT);
+        tm.Command(tm.opcodes["SUB"]);
+        tm.Command(tm.opcodes["PRINT"]);
 
-        tm.Command(InsCode::DUP);
-        tm.Command(InsCode::PRINT);
+        tm.Command(tm.opcodes["DUP"]);
+        tm.Command(tm.opcodes["PRINT"]);
 
-        tm.Command(InsCode::PRINTC);
+        tm.Command(tm.opcodes["PRINTC"]);
     }
 }
 
