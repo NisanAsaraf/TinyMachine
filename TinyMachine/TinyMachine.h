@@ -9,7 +9,7 @@ class TinyMachine
 public:
 	TinyMachine() = default;
 	std::stack<uint32_t>& getStack();
-	void Command(std::string a_instruction, uint32_t a_value = 0);
+	void Command(InsCode, uint32_t a_value = 0);
 private:
 	std::stack<uint32_t> v_stack;
 	Instructions v_instructions;

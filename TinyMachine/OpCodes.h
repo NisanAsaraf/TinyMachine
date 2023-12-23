@@ -7,6 +7,23 @@
 
 namespace tiny_machine
 {
+	enum class InsCode
+	{
+		POP,
+		PUSH, 
+		DUP, 
+		ADD, 
+		SUB, 
+		MUL, 
+		DIV,
+		SWAP,
+		PRINT,
+		PRINTC,
+		NOP,
+		HALT,
+		INC,
+		DEC
+	};
 
 class Instructions
 {
