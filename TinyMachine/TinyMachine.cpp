@@ -106,51 +106,156 @@ namespace tiny_machine
         return 0;
 	}
 
-    void test1()
+    void TinyMachine::StreamBitsToVector(std::string const& filename)
     {
-        TinyMachine tm;
-        tm.Command(tm.opcodes["PUSH"], 12);
-        tm.Command(tm.opcodes["PRINT"]);
+        std::ifstream file(filename, std::ios::binary);
 
-        tm.Command(tm.opcodes["PUSH"], 8);
-        tm.Command(tm.opcodes["PRINT"]);
+        if (!file.is_open()) 
+        {
+            std::cerr << "Unable to open file." << std::endl;
+        }
 
-        tm.Command(tm.opcodes["DUP"]);
-        tm.Command(tm.opcodes["PRINT"]);
+        uint32_t value;
+        while (file.read(reinterpret_cast<char*>(&value), sizeof(uint32_t))) 
+        {
+            v_bits.push_back(value);
+        }
 
-        tm.Command(tm.opcodes["INC"]);
-        tm.Command(tm.opcodes["PRINT"]);
-
-        tm.Command(tm.opcodes["INC"]);
-        tm.Command(tm.opcodes["PRINT"]);
-
-        tm.Command(tm.opcodes["MUL"]);
-        tm.Command(tm.opcodes["PRINT"]);
-
-        tm.Command(tm.opcodes["SUB"]);
-        tm.Command(tm.opcodes["PRINT"]);
-
-        tm.Command(tm.opcodes["DUP"]);
-        tm.Command(tm.opcodes["PRINT"]);
-
-        tm.Command(tm.opcodes["PRINTC"]);
+        file.close();
     }
 
-    void test2()
+    void TinyMachine::printVector()
     {
-        TinyMachine tm;
-        tm.Command(tm.opcodes["PUSH"], -512);
-        tm.Command(tm.opcodes["PRINT"]);
+        for (uint32_t val : v_bits)
+        {
+            std::cout << val;
+            if (!v_bits.empty())
+            {
+                std::cout << ", ";
+            }
+            else
+            {
+                std::cout << std::endl;
+            }
+        }
     }
 
-    void test3()
+    void TinyMachine::runCommandsFromVector()
     {
-
+        for (int i = 0; i < v_bits.size(); i++)
+        {
+            uint32_t MSB = GetMSB(v_bits[i]);
+            if (MSB == 1) //no argument 01
+            {
+                CommandWithNoArgument(v_bits[i]);
+            }
+            else if (MSB == 2) // with argument 10
+            {
+                if (i + 1 >= v_bits.size())
+                {
+                    return;
+                }
+                CommandWithArgument(v_bits[i], v_bits[i+1]);
+                i++;
+            }
+        }
     }
+}
+
+void test1()
+{
+    tiny_machine::TinyMachine tm;
+
+    tm.Command(tm.opcodes["PUSH"], 12);
+    tm.Command(tm.opcodes["PRINT"]);
+
+    tm.Command(tm.opcodes["PUSH"], 8);
+    tm.Command(tm.opcodes["PRINT"]);
+
+    tm.Command(tm.opcodes["DUP"]);
+    tm.Command(tm.opcodes["PRINT"]);
+
+    tm.Command(tm.opcodes["INC"]);
+    tm.Command(tm.opcodes["PRINT"]);
+
+    tm.Command(tm.opcodes["INC"]);
+    tm.Command(tm.opcodes["PRINT"]);
+
+    tm.Command(tm.opcodes["MUL"]);
+    tm.Command(tm.opcodes["PRINT"]);
+
+    tm.Command(tm.opcodes["SUB"]);
+    tm.Command(tm.opcodes["PRINT"]);
+
+    tm.Command(tm.opcodes["DUP"]);
+    tm.Command(tm.opcodes["PRINT"]);
+
+    tm.Command(tm.opcodes["PRINTC"]);
+}
+
+void createBinTest1()
+{
+    tiny_machine::TinyMachine tm;
+    std::string filename = "test1.bin";
+    uint32_t tw = 12;
+    uint32_t ew = 8;
+
+    std::ofstream file(filename, std::ios::binary | std::ios::app);
+
+    if (!file.is_open())
+    {
+        std::cerr << "Unable to create file." << std::endl;
+        return;
+    }
+
+    file.write(reinterpret_cast<const char*>(&tm.opcodes["PUSH"]), sizeof(uint32_t));
+    file.write(reinterpret_cast<const char*>(&tw), sizeof(uint32_t));
+    file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINT"]), sizeof(uint32_t));
+
+    file.write(reinterpret_cast<const char*>(&tm.opcodes["PUSH"]), sizeof(uint32_t));
+    file.write(reinterpret_cast<const char*>(&ew), sizeof(uint32_t));
+    file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINT"]), sizeof(uint32_t));
+
+    file.write(reinterpret_cast<const char*>(&tm.opcodes["DUP"]), sizeof(uint32_t));
+    file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINT"]), sizeof(uint32_t));
+
+    file.write(reinterpret_cast<const char*>(&tm.opcodes["INC"]), sizeof(uint32_t));
+    file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINT"]), sizeof(uint32_t));
+
+    file.write(reinterpret_cast<const char*>(&tm.opcodes["INC"]), sizeof(uint32_t));
+    file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINT"]), sizeof(uint32_t));
+
+    file.write(reinterpret_cast<const char*>(&tm.opcodes["MUL"]), sizeof(uint32_t));
+    file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINT"]), sizeof(uint32_t));
+
+    file.write(reinterpret_cast<const char*>(&tm.opcodes["SUB"]), sizeof(uint32_t));
+    file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINT"]), sizeof(uint32_t));
+
+    file.write(reinterpret_cast<const char*>(&tm.opcodes["DUP"]), sizeof(uint32_t));
+    file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINT"]), sizeof(uint32_t));
+
+    file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINTC"]), sizeof(uint32_t));
+
+    file.close();
+}
+
+void BinTest1()
+{
+    tiny_machine::TinyMachine tm;
+    createBinTest1();
+    tm.StreamBitsToVector("test1.bin");
+    tm.runCommandsFromVector();
+}
+
+void test2()
+{
+    tiny_machine::TinyMachine tm;
+    tm.Command(tm.opcodes["PUSH"], -512);
+    tm.Command(tm.opcodes["PRINT"]);
 }
 
 int main()
 {
-    tiny_machine::test1();
+    test2();
     return 0;
 }
