@@ -149,6 +149,7 @@ bool Instructions::INC(std::stack<uint32_t>& a_stack)
 	uint32_t tmp = a_stack.top();
 	a_stack.pop();
 	a_stack.push(++tmp);
+	return 1;
 }
 
 bool Instructions::DEC(std::stack<uint32_t>& a_stack)
@@ -160,4 +161,5 @@ bool Instructions::DEC(std::stack<uint32_t>& a_stack)
 	uint32_t tmp = a_stack.top();
 	a_stack.pop();
 	a_stack.push(--tmp);
+	return 1;
 }

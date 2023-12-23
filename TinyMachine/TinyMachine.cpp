@@ -9,61 +9,88 @@ namespace tiny_machine
 		return v_stack;
 	}
 
-	void TinyMachine::Command(InsCode a_code, uint32_t a_value = 0)
+	bool TinyMachine::Command(InsCode a_code, uint32_t a_value)
 	{
+        bool success;
         switch (a_code) 
         {
         case InsCode::POP:
-            v_instructions.POP(v_stack);
+            success = v_instructions.POP(v_stack);
             break;
         case InsCode::PUSH:
-            v_instructions.PUSH(v_stack, a_value);
+            success = v_instructions.PUSH(v_stack, a_value);
             break;
         case InsCode::DUP:
-            v_instructions.DUP(v_stack);
+            success = v_instructions.DUP(v_stack);
             break;
         case InsCode::ADD:
-            v_instructions.ADD(v_stack);
+            success = v_instructions.ADD(v_stack);
             break;
         case InsCode::SUB:
-            v_instructions.SUB(v_stack);
+            success = v_instructions.SUB(v_stack);
             break;
         case InsCode::MUL:
-            v_instructions.MUL(v_stack);
+            success = v_instructions.MUL(v_stack);
             break;
         case InsCode::DIV:
-            v_instructions.DIV(v_stack);
+            success = v_instructions.DIV(v_stack);
             break;
         case InsCode::SWAP:
-            v_instructions.SWAP(v_stack);
+            success = v_instructions.SWAP(v_stack);
             break;
         case InsCode::PRINT:
-            v_instructions.PRINT(v_stack);
+            success = v_instructions.PRINT(v_stack);
             break;
         case InsCode::PRINTC:
-            v_instructions.PRINTC(v_stack);
+            success = v_instructions.PRINTC(v_stack);
             break;
         case InsCode::NOP:
-            v_instructions.NOP();
+            success = v_instructions.NOP();
             break;
         case InsCode::HALT:
-            v_instructions.HALT();
+            success = v_instructions.HALT();
             break;
         case InsCode::INC:
-            v_instructions.INC(v_stack);
+            success = v_instructions.INC(v_stack);
             break;
         case InsCode::DEC:
-            v_instructions.DEC(v_stack);
+            success = v_instructions.DEC(v_stack);
             break;
         default:
+            success = 0;
             break;
 		}
+        return success;
 	}
+    void test1()
+    {
+        TinyMachine tm;
+        tm.Command(InsCode::PUSH, 12);
+        tm.Command(InsCode::PRINT);
 
+        tm.Command(InsCode::PUSH, 8);
+        tm.Command(InsCode::PRINT);
+
+        tm.Command(InsCode::DUP);
+        tm.Command(InsCode::PRINT);
+
+        tm.Command(InsCode::INC);
+        tm.Command(InsCode::PRINT);
+
+        tm.Command(InsCode::MUL);
+        tm.Command(InsCode::PRINT);
+
+        tm.Command(InsCode::SUB);
+        tm.Command(InsCode::PRINT);
+
+        tm.Command(InsCode::DUP);
+        tm.Command(InsCode::PRINT);
+
+        tm.Command(InsCode::PRINTC);
+    }
 	int main()
 	{
-		TinyMachine tm;
-
+        test1();
 		return 0;
 	}
 }
