@@ -1,9 +1,9 @@
 #ifndef OP_CODES
 #define OP_CODES
-#include <stack>
 #include <iostream>
+#include <stack>
 #include <unordered_map>
-#include <functional>
+#include <vector>
 
 namespace tiny_machine
 {
@@ -27,26 +27,27 @@ enum class Codes : uint32_t
 };
 
 std::unordered_map<std::string, uint32_t> createOpCodesMap();
+uint32_t GetMSB(uint32_t a_val);
 
 class Instructions
 {
 public:
 	Instructions();
 
-	bool POP(std::stack<uint32_t>& a_stack);
-	bool PUSH(std::stack<uint32_t>& a_stack, uint32_t a_data);
-	bool DUP(std::stack<uint32_t>& a_stack);
-	bool ADD(std::stack<uint32_t>& a_stack);
-	bool SUB(std::stack<uint32_t>& a_stack);
-	bool MUL(std::stack<uint32_t>& a_stack);
-	bool DIV(std::stack<uint32_t>& a_stack);
-	bool SWAP(std::stack<uint32_t>& a_stack);
-	bool PRINT(std::stack<uint32_t> a_stack);
-	bool PRINTC(std::stack<uint32_t>& a_stack);
+	bool POP(std::stack<int32_t>& a_stack);
+	bool PUSH(std::stack<int32_t>& a_stack, int32_t a_data);
+	bool DUP(std::stack<int32_t>& a_stack);
+	bool ADD(std::stack<int32_t>& a_stack);
+	bool SUB(std::stack<int32_t>& a_stack);
+	bool MUL(std::stack<int32_t>& a_stack);
+	bool DIV(std::stack<int32_t>& a_stack);
+	bool SWAP(std::stack<int32_t>& a_stack);
+	bool PRINT(std::stack<int32_t> a_stack);
+	bool PRINTC(std::stack<int32_t>& a_stack);
 	bool NOP();
 	bool HALT();
-	bool INC(std::stack<uint32_t>& a_stack);
-	bool DEC(std::stack<uint32_t>& a_stack);
+	bool INC(std::stack<int32_t>& a_stack);
+	bool DEC(std::stack<int32_t>& a_stack);
 };
 }
 #endif

@@ -26,11 +26,16 @@ namespace tiny_machine
 		return opCodes;
 	}
 
+	uint32_t GetMSB(uint32_t a_val)
+	{
+		return a_val >> 30;
+	}
+
 	Instructions::Instructions()
 	{
 	}
 
-	bool Instructions::POP(std::stack<uint32_t>& a_stack)
+	bool Instructions::POP(std::stack<int32_t>& a_stack)
 	{
 		if (a_stack.empty())
 		{
@@ -40,13 +45,13 @@ namespace tiny_machine
 		return 1;
 	}
 
-	bool Instructions::PUSH(std::stack<uint32_t>& a_stack, uint32_t a_data)
+	bool Instructions::PUSH(std::stack<int32_t>& a_stack, int32_t a_data)
 	{
 		a_stack.push(a_data);
 		return 1;
 	}
 
-	bool Instructions::DUP(std::stack<uint32_t>& a_stack)
+	bool Instructions::DUP(std::stack<int32_t>& a_stack)
 	{
 		if (a_stack.empty())
 		{
@@ -57,7 +62,7 @@ namespace tiny_machine
 		return 1;
 	}
 
-	bool Instructions::ADD(std::stack<uint32_t>& a_stack)
+	bool Instructions::ADD(std::stack<int32_t>& a_stack)
 	{
 		if (a_stack.size() < 2)
 		{
@@ -73,7 +78,7 @@ namespace tiny_machine
 		return 1;
 	}
 
-	bool Instructions::SUB(std::stack<uint32_t>& a_stack)
+	bool Instructions::SUB(std::stack<int32_t>& a_stack)
 	{
 		if (a_stack.size() < 2)
 		{
@@ -89,7 +94,7 @@ namespace tiny_machine
 		return 1;
 	}
 
-	bool Instructions::MUL(std::stack<uint32_t>& a_stack)
+	bool Instructions::MUL(std::stack<int32_t>& a_stack)
 	{
 		if (a_stack.size() < 2)
 		{
@@ -105,7 +110,7 @@ namespace tiny_machine
 		return 1;
 	}
 
-	bool Instructions::DIV(std::stack<uint32_t>& a_stack)
+	bool Instructions::DIV(std::stack<int32_t>& a_stack)
 	{
 		if (a_stack.size() < 2)
 		{
@@ -129,7 +134,7 @@ namespace tiny_machine
 		return 1;
 	}
 
-	bool Instructions::SWAP(std::stack<uint32_t>& a_stack)
+	bool Instructions::SWAP(std::stack<int32_t>& a_stack)
 	{
 		if (a_stack.size() < 2)
 		{
@@ -146,14 +151,15 @@ namespace tiny_machine
 		return 1;
 	}
 
-	bool Instructions::PRINT(std::stack<uint32_t> a_stack)
+	bool Instructions::PRINT(std::stack<int32_t> a_stack)
 	{
 		if (a_stack.empty())
 		{
 			return 0;
 		}
 
-		std::stack<uint32_t> reverse_stack;
+		std::stack<int32_t> reverse_stack;
+
 		while (!a_stack.empty())
 		{
 			reverse_stack.push(a_stack.top());
@@ -162,7 +168,14 @@ namespace tiny_machine
 
 		while (!reverse_stack.empty())
 		{
-			std::cout << reverse_stack.top();
+			if (GetMSB(reverse_stack.top() == 3))//negative
+			{
+				std::cout << ~reverse_stack.top() + 1;
+			}
+			else
+			{
+				std::cout << reverse_stack.top();
+			}
 
 			reverse_stack.pop();
 			if (!reverse_stack.empty())
@@ -176,7 +189,7 @@ namespace tiny_machine
 		return 1;
 	}
 
-	bool Instructions::PRINTC(std::stack<uint32_t>& a_stack)
+	bool Instructions::PRINTC(std::stack<int32_t>& a_stack)
 	{
 		if (a_stack.empty())
 		{
@@ -196,7 +209,7 @@ namespace tiny_machine
 		return 1;
 	}
 
-	bool Instructions::INC(std::stack<uint32_t>& a_stack)
+	bool Instructions::INC(std::stack<int32_t>& a_stack)
 	{
 		if (a_stack.empty())
 		{
@@ -208,7 +221,7 @@ namespace tiny_machine
 		return 1;
 	}
 
-	bool Instructions::DEC(std::stack<uint32_t>& a_stack)
+	bool Instructions::DEC(std::stack<int32_t>& a_stack)
 	{
 		if (a_stack.empty())
 		{

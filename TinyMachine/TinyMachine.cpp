@@ -9,25 +9,27 @@ namespace tiny_machine
         opcodes = createOpCodesMap();
     }
 
-	std::stack<uint32_t>& TinyMachine::getStack()
-	{
-		return v_stack;
-	}
-
-    uint32_t TinyMachine::GetMSB(uint32_t a_val)
+    int32_t convertTwosComplementToInt(uint32_t a_value)
     {
-        return a_val >> 30;
+        if (GetMSB(a_value) == 3)//11
+        {
+            return -static_cast<int32_t>((~a_value) + 1);
+        }
+        else if(GetMSB(a_value) == 0)//00
+        {
+            return static_cast<int32_t>(a_value);
+        }
     }
-
     bool TinyMachine::CommandWithArgument(uint32_t a_opcode, uint32_t a_value)
     {
         bool success;
         Codes code = static_cast<Codes>(a_opcode);
+        int32_t a_data = convertTwosComplementToInt(a_value);
 
         switch (code)
         {
         case Codes::PUSH:
-            success = v_instructions.PUSH(v_stack, a_value);
+            success = v_instructions.PUSH(v_stack, a_data);
             break;
         default:
             success = 0;
@@ -132,6 +134,18 @@ namespace tiny_machine
         tm.Command(tm.opcodes["PRINT"]);
 
         tm.Command(tm.opcodes["PRINTC"]);
+    }
+
+    void test2()
+    {
+        TinyMachine tm;
+        tm.Command(tm.opcodes["PUSH"], -512);
+        tm.Command(tm.opcodes["PRINT"]);
+    }
+
+    void test3()
+    {
+
     }
 }
 
