@@ -40,9 +40,12 @@ bool Instructions::ADD(std::stack<uint32_t>& a_stack)
 		return 0;
 	}
 
-	uint32_t tmp = a_stack.top();
+	uint32_t tmp1 = a_stack.top();
 	a_stack.pop();
-	a_stack.push(tmp + a_stack.top());
+	uint32_t tmp2 = a_stack.top();
+	a_stack.pop();
+
+	a_stack.push(tmp1 + tmp2);
 	return 1;
 }
 
@@ -53,9 +56,12 @@ bool Instructions::SUB(std::stack<uint32_t>& a_stack)
 		return 0;
 	}
 
-	uint32_t tmp = a_stack.top();
+	uint32_t tmp1 = a_stack.top();
 	a_stack.pop();
-	a_stack.push(tmp - a_stack.top());
+	uint32_t tmp2 = a_stack.top();
+	a_stack.pop();
+
+	a_stack.push(tmp1 - tmp2);
 	return 1;
 }
 
@@ -66,9 +72,12 @@ bool Instructions::MUL(std::stack<uint32_t>& a_stack)
 		return 0;
 	}
 
-	uint32_t tmp = a_stack.top();
+	uint32_t tmp1 = a_stack.top();
 	a_stack.pop();
-	a_stack.push(tmp * a_stack.top());
+	uint32_t tmp2 = a_stack.top();
+	a_stack.pop();
+
+	a_stack.push(tmp1 * tmp2);
 	return 1;
 }
 
@@ -79,15 +88,19 @@ bool Instructions::DIV(std::stack<uint32_t>& a_stack)
 		return 0;
 	}
 
-	uint32_t tmp = a_stack.top();
+	uint32_t tmp1 = a_stack.top();
 	a_stack.pop();
 
 	if (a_stack.top() == 0)
 	{
-		a_stack.push(tmp);
+		a_stack.push(tmp1);
 		return 0;
 	}
-	a_stack.push(tmp / a_stack.top());
+
+	uint32_t tmp2 = a_stack.top();
+	a_stack.pop();
+
+	a_stack.push(tmp1 / tmp2);
 
 	return 1;
 }
@@ -109,14 +122,33 @@ bool Instructions::SWAP(std::stack<uint32_t>& a_stack)
 	return 1;
 }
 
-bool Instructions::PRINT(std::stack<uint32_t>& a_stack)
+bool Instructions::PRINT(std::stack<uint32_t> a_stack)
 {
 	if (a_stack.empty())
 	{
 		return 0;
 	}
 
-	std::cout << a_stack.top() << std::endl;
+	std::stack<uint32_t> reverse_stack;
+	while (!a_stack.empty())
+	{
+		reverse_stack.push(a_stack.top());
+		a_stack.pop();
+	}
+
+	while(!reverse_stack.empty())
+	{
+		std::cout << reverse_stack.top();
+
+		reverse_stack.pop();
+		if (!reverse_stack.empty())
+		{
+			std::cout << ", ";
+		}
+	}
+
+	std::cout << std::endl;
+
 	return 1;
 }
 

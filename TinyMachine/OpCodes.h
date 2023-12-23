@@ -38,7 +38,7 @@ public:
 	bool MUL(std::stack<uint32_t>& a_stack);
 	bool DIV(std::stack<uint32_t>& a_stack);
 	bool SWAP(std::stack<uint32_t>& a_stack);
-	bool PRINT(std::stack<uint32_t>& a_stack);
+	bool PRINT(std::stack<uint32_t> a_stack);
 	bool PRINTC(std::stack<uint32_t>& a_stack);
 	bool NOP();
 	bool HALT();

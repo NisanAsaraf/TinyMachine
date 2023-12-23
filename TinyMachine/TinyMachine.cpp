@@ -62,6 +62,7 @@ namespace tiny_machine
 		}
         return success;
 	}
+
     void test1()
     {
         TinyMachine tm;
@@ -72,6 +73,9 @@ namespace tiny_machine
         tm.Command(InsCode::PRINT);
 
         tm.Command(InsCode::DUP);
+        tm.Command(InsCode::PRINT);
+
+        tm.Command(InsCode::INC);
         tm.Command(InsCode::PRINT);
 
         tm.Command(InsCode::INC);
@@ -88,9 +92,10 @@ namespace tiny_machine
 
         tm.Command(InsCode::PRINTC);
     }
-	int main()
-	{
-        test1();
-		return 0;
-	}
+}
+
+int main()
+{
+    tiny_machine::test1();
+    return 0;
 }
