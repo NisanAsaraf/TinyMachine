@@ -2,11 +2,17 @@
 #define OP_CODES
 #include <stack>
 #include <iostream>
+#include <unordered_map>
+#include <functional>
+
 namespace tiny_machine
 {
+
 class Instructions
 {
 public:
+	Instructions();
+
 	bool POP(std::stack<uint32_t>& a_stack);
 	bool PUSH(std::stack<uint32_t>& a_stack, uint32_t a_data);
 	bool DUP(std::stack<uint32_t>& a_stack);

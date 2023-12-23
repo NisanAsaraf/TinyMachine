@@ -2,6 +2,9 @@
 
 using namespace tiny_machine;
 
+Instructions::Instructions()
+{
+}
 
 bool Instructions::POP(std::stack<uint32_t>& a_stack)
 {
