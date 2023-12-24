@@ -48,10 +48,9 @@ namespace tiny_machine
 		a_stack.pop();
 	}
 
-	int Instructions::PUSH(std::stack<int32_t>& a_stack, int32_t a_data)
+	void Instructions::PUSH(std::stack<int32_t>& a_stack, int32_t a_data)
 	{
 		a_stack.push(a_data);
-		return -1;
 	}
 
 	void Instructions::DUP(std::stack<int32_t>& a_stack)
@@ -195,9 +194,8 @@ namespace tiny_machine
 	{
 	}
 
-	int32_t Instructions::HALT()
+	void Instructions::HALT()
 	{
-		return -1;
 	}
 
 	void Instructions::INC(std::stack<int32_t>& a_stack)
@@ -278,7 +276,7 @@ namespace tiny_machine
 		return -1;
 	}
 
-	int32_t Instructions::CALL(std::stack<int32_t>& a_stack, int32_t a_data)
+	int32_t Instructions::CALL(std::stack<int32_t>& a_stack, int32_t a_data, size_t a_ret)
 	{
 		if (a_stack.empty())
 		{
@@ -289,8 +287,12 @@ namespace tiny_machine
 		{
 			return -1;
 		}
-
+		v_retIndex = a_ret;
 		return a_data;
 	}
 
+	int32_t Instructions::RET()
+	{
+		return v_retIndex;
+	}
 }//namespace tiny_machine

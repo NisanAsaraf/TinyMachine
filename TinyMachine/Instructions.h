@@ -40,7 +40,7 @@ public:
 	Instructions();
 
 	void POP(std::stack<int32_t>& a_stack);
-	int32_t PUSH(std::stack<int32_t>& a_stack, int32_t a_data);
+	void PUSH(std::stack<int32_t>& a_stack, int32_t a_data);
 	void DUP(std::stack<int32_t>& a_stack);
 	void ADD(std::stack<int32_t>& a_stack);
 	void SUB(std::stack<int32_t>& a_stack);
@@ -50,13 +50,17 @@ public:
 	void PRINT(std::stack<int32_t> a_stack);
 	void PRINTC(std::stack<int32_t>& a_stack);
 	void NOP();
-	int32_t HALT();
+	void HALT();
 	void INC(std::stack<int32_t>& a_stack);
 	void DEC(std::stack<int32_t>& a_stack);
+
 	int32_t JMP(std::stack<int32_t>& a_stack, int32_t a_data);
 	int32_t JZ(std::stack<int32_t>& a_stack, int32_t a_data);
 	int32_t JNZ(std::stack<int32_t>& a_stack, int32_t a_data);
-	int32_t CALL(std::stack<int32_t>& a_stack, int32_t a_data);
+	int32_t CALL(std::stack<int32_t>& a_stack, int32_t a_data, size_t a_ret);
+	int32_t RET();
+private:
+	size_t v_retIndex;
 };
 }//namespace tiny_machine
 #endif

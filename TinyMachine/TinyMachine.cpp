@@ -23,32 +23,37 @@ namespace tiny_machine
 
     int TinyMachine::CommandWithArgument(uint32_t a_opcode, uint32_t a_value)
     {
-        int result;
+        int status;
         Codes code = static_cast<Codes>(a_opcode);
         int32_t a_data = convertTwosComplementToInt(a_value);
 
         switch (code)
         {
         case Codes::PUSH:
-            result = v_instructions.PUSH(v_stack, a_data);
+            v_instructions.PUSH(v_stack, a_data);
             break;
         case Codes::JMP:
-            result = v_instructions.JMP(v_stack, a_data);
+            status = v_instructions.JMP(v_stack, a_data);
             break;
         case Codes::JZ:
-            result = v_instructions.JZ(v_stack, a_data);
+            status = v_instructions.JZ(v_stack, a_data);
             break;
         case Codes::JNZ:
-            result = v_instructions.JNZ(v_stack, a_data);
+            status = v_instructions.JNZ(v_stack, a_data);
             break;
         case Codes::CALL:
-            result = v_instructions.CALL(v_stack, a_data);
+            status = v_instructions.CALL(v_stack, a_data, v_index);
+            v_bits.push_back(opcodes["RET"]);
+            break;
+        case Codes::RET:
+            status = v_instructions.RET();
+            v_bits.pop_back();
             break;
         default:
-            result = -1;
+            status = -1;
             break;
         }
-        return result;
+        return status;
     }
 
     bool TinyMachine::CommandWithNoArgument(uint32_t a_opcode)

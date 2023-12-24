@@ -24,7 +24,6 @@ private:
 	std::vector<uint32_t> v_bits;
 	std::stack<int32_t> v_stack;
 	Instructions v_instructions;
-	size_t v_ret;
 	size_t v_index;
 };
 }//namespace tiny_machine
