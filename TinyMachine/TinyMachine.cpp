@@ -50,55 +50,54 @@ namespace tiny_machine
 
     bool TinyMachine::CommandWithNoArgument(uint32_t a_opcode)
     {
-        bool success;
         Codes code = static_cast<Codes>(a_opcode);
 
         switch (code)
         {
         case Codes::POP:
-            success = v_instructions.POP(v_stack);
+            v_instructions.POP(v_stack);
             break;
         case Codes::DUP:
-            success = v_instructions.DUP(v_stack);
+            v_instructions.DUP(v_stack);
             break;
         case Codes::ADD:
-            success = v_instructions.ADD(v_stack);
+            v_instructions.ADD(v_stack);
             break;
         case Codes::SUB:
-            success = v_instructions.SUB(v_stack);
+            v_instructions.SUB(v_stack);
             break;
         case Codes::MUL:
-            success = v_instructions.MUL(v_stack);
+            v_instructions.MUL(v_stack);
             break;
         case Codes::DIV:
-            success = v_instructions.DIV(v_stack);
+            v_instructions.DIV(v_stack);
             break;
         case Codes::SWAP:
-            success = v_instructions.SWAP(v_stack);
+            v_instructions.SWAP(v_stack);
             break;
         case Codes::PRINT:
-            success = v_instructions.PRINT(v_stack);
+            v_instructions.PRINT(v_stack);
             break;
         case Codes::PRINTC:
-            success = v_instructions.PRINTC(v_stack);
+            v_instructions.PRINTC(v_stack);
             break;
         case Codes::NOP:
-            success = v_instructions.NOP();
+            v_instructions.NOP();
             break;
         case Codes::HALT:
-            success = v_instructions.HALT();
+            v_instructions.HALT();
             break;
         case Codes::INC:
-            success = v_instructions.INC(v_stack);
+            v_instructions.INC(v_stack);
             break;
         case Codes::DEC:
-            success = v_instructions.DEC(v_stack);
+            v_instructions.DEC(v_stack);
             break;
         default:
-            success = 0;
+            return 0;
             break;
         }
-        return success;
+        return 1;
     }
 
 	bool TinyMachine::Command(uint32_t a_opcode, uint32_t a_value)
@@ -158,10 +157,10 @@ namespace tiny_machine
                 {
                     return;
                 }
-                jumpStatus = CommandWithArgument(v_bits[i], v_bits[i + 1])l
+                jumpStatus = CommandWithArgument(v_bits[i], v_bits[i + 1]);
                 if (jumpStatus != -1)
                 {
-                    i = jumpStatus;
+                    i = jumpStatus - 1;
                 }
                 else
                 {

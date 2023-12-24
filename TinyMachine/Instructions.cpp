@@ -254,4 +254,5 @@ namespace tiny_machine
 
 		return -1;
 	}
+
 }//namespace tiny_machine
