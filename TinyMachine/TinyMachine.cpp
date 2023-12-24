@@ -7,6 +7,7 @@ namespace tiny_machine
     TinyMachine::TinyMachine()
     {
         opcodes = createOpCodesMap();
+        halt = false;
     }
 
     int32_t convertTwosComplementToInt(uint32_t a_value)
@@ -40,6 +41,9 @@ namespace tiny_machine
             break;
         case Codes::JNZ:
             result = v_instructions.JNZ(v_stack, a_data);
+            break;
+        case Codes::CALL:
+            result = v_instructions.CALL(v_stack, a_data);
             break;
         default:
             result = -1;
@@ -133,23 +137,18 @@ namespace tiny_machine
         file.close();
     }
 
-    void TinyMachine::printVector()
-    {
-        for (uint32_t val : v_bits)
-        {
-            std::cout << val << std::endl;          
-        }
-    }
-
     void TinyMachine::runCommandsFromVector()
     {
-        int jumpStatus;
+        int32_t jumpStatus;
         for (int i = 0; i < v_bits.size(); i++)
         {
             uint32_t MSB = GetMSB(v_bits[i]);
             if (MSB == 1) //no argument 01
             {
-                CommandWithNoArgument(v_bits[i]);
+                if (CommandWithNoArgument(v_bits[i]) == -1)//only happens when HALT happens
+                {
+                    break;
+                }
             }
             else if (MSB == 2) // with argument 10
             {
@@ -157,6 +156,7 @@ namespace tiny_machine
                 {
                     return;
                 }
+
                 jumpStatus = CommandWithArgument(v_bits[i], v_bits[i + 1]);
                 if (jumpStatus != -1)
                 {
@@ -209,7 +209,7 @@ void createBinTest1()
     uint32_t tw = 12;
     uint32_t ew = 8;
 
-    std::ofstream file(filename, std::ios::binary | std::ios::app);
+    std::ofstream file(filename, std::ios::binary);
 
     if (!file.is_open())
     {
@@ -248,6 +248,53 @@ void createBinTest1()
     file.close();
 }
 
+void createBinTest2()
+{
+    tiny_machine::TinyMachine tm;
+    std::string filename = "test2.bin";
+    uint32_t t1 = 64;
+    uint32_t t2 = 70;
+    uint32_t t3 = 2;
+
+    std::ofstream file(filename, std::ios::binary);
+
+    if (!file.is_open())
+    {
+        std::cerr << "Unable to create file." << std::endl;
+        return;
+    }
+
+    file.write(reinterpret_cast<const char*>(&tm.opcodes["PUSH"]), sizeof(uint32_t));
+    file.write(reinterpret_cast<const char*>(&t1), sizeof(uint32_t));
+    //file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINT"]), sizeof(uint32_t));
+
+    file.write(reinterpret_cast<const char*>(&tm.opcodes["INC"]), sizeof(uint32_t));
+    //file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINT"]), sizeof(uint32_t));
+
+    file.write(reinterpret_cast<const char*>(&tm.opcodes["DUP"]), sizeof(uint32_t));
+    //file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINT"]), sizeof(uint32_t));
+
+    file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINTC"]), sizeof(uint32_t));
+
+    file.write(reinterpret_cast<const char*>(&tm.opcodes["DUP"]), sizeof(uint32_t));
+    //file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINT"]), sizeof(uint32_t));
+
+    file.write(reinterpret_cast<const char*>(&tm.opcodes["PUSH"]), sizeof(uint32_t));
+    file.write(reinterpret_cast<const char*>(&t2), sizeof(uint32_t));
+    //file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINT"]), sizeof(uint32_t));
+
+    file.write(reinterpret_cast<const char*>(&tm.opcodes["SUB"]), sizeof(uint32_t));
+    //file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINT"]), sizeof(uint32_t));
+
+    file.write(reinterpret_cast<const char*>(&tm.opcodes["JNZ"]), sizeof(uint32_t));
+    file.write(reinterpret_cast<const char*>(&t3), sizeof(uint32_t));
+    //file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINT"]), sizeof(uint32_t));
+
+    file.write(reinterpret_cast<const char*>(&tm.opcodes["HALT"]), sizeof(uint32_t));
+
+    file.close();
+}
+
 void BinTest1()
 {
     tiny_machine::TinyMachine tm;
@@ -256,15 +303,16 @@ void BinTest1()
     tm.runCommandsFromVector();
 }
 
-void test2()
+void BinTest2()
 {
     tiny_machine::TinyMachine tm;
-    tm.Command(tm.opcodes["PUSH"], -512);
-    tm.Command(tm.opcodes["PRINT"]);
+    createBinTest2();
+    tm.StreamBitsToVector("test2.bin");
+    tm.runCommandsFromVector();
 }
 
 int main()
 {
-    test2();
+    BinTest2();
     return 0;
 }

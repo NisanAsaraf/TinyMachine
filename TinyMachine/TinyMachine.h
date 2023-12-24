@@ -16,7 +16,6 @@ public:
 	bool Command(uint32_t a_command, uint32_t a_value = 0);
 	int CommandWithArgument(uint32_t a_command, uint32_t a_value);
 	bool CommandWithNoArgument(uint32_t a_command);
-	void printVector();
 	void runCommandsFromVector();
 	void StreamBitsToVector(std::string const& filename);
 	std::unordered_map<std::string, uint32_t> opcodes;
@@ -25,6 +24,7 @@ private:
 	std::vector<uint32_t> v_bits;
 	std::stack<int32_t> v_stack;
 	Instructions v_instructions;
+	int32_t v_ret;
 };
 }//namespace tiny_machine
 
