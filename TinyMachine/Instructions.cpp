@@ -1,4 +1,4 @@
-#include "OpCodes.h"
+#include "Instructions.h"
 
 namespace tiny_machine
 {
@@ -20,7 +20,10 @@ namespace tiny_machine
 			{ "NOP", static_cast<uint32_t>(Codes::NOP) },
 			{ "HALT", static_cast<uint32_t>(Codes::HALT) },
 			{ "INC", static_cast<uint32_t>(Codes::INC) },
-			{ "DEC", static_cast<uint32_t>(Codes::DEC) }
+			{ "DEC", static_cast<uint32_t>(Codes::DEC) },
+			{ "JMP", static_cast<uint32_t>(Codes::JMP) },
+			{ "JZ", static_cast<uint32_t>(Codes::JZ) },
+			{ "JNZ", static_cast<uint32_t>(Codes::JNZ) }
 		};
 
 		return opCodes;
@@ -231,5 +234,41 @@ namespace tiny_machine
 		a_stack.pop();
 		a_stack.push(--tmp);
 		return 1;
+	}
+
+	int32_t Instructions::JMP(std::stack<int32_t>& a_stack, int32_t a_data)
+	{
+		return a_data;
+	}
+
+	int32_t Instructions::JZ(std::stack<int32_t>& a_stack, int32_t a_data)
+	{
+		if (a_stack.empty())
+		{
+			return -1;
+		}
+
+		if (a_stack.top() == 0)
+		{
+			a_stack.pop();
+			return a_data;
+		}
+		return -1;
+	}
+
+	int32_t Instructions::JNP(std::stack<int32_t>& a_stack, int32_t a_data)
+	{
+		if (a_stack.empty())
+		{
+			return -1;
+		}
+
+		if (a_stack.top() != 0)
+		{
+			a_stack.pop();
+			return a_data;
+		}
+
+		return -1;
 	}
 }//namespace tiny_machine

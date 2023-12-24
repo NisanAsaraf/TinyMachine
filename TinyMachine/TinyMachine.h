@@ -1,6 +1,6 @@
 ﻿#ifndef TINY_MACHINE
 #define TINY_MACHINE
-#include "OpCodes.h"
+#include "Instructions.h"
 #include <fstream>
 #include <cstdint>
 #include <vector>
