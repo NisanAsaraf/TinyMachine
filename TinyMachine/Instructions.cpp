@@ -25,7 +25,6 @@ namespace tiny_machine
 			{ "JZ", static_cast<uint32_t>(Codes::JZ) },
 			{ "JNZ", static_cast<uint32_t>(Codes::JNZ) }
 		};
-
 		return opCodes;
 	}
 
@@ -38,38 +37,35 @@ namespace tiny_machine
 	{
 	}
 
-	bool Instructions::POP(std::stack<int32_t>& a_stack)
+	void Instructions::POP(std::stack<int32_t>& a_stack)
 	{
 		if (a_stack.empty())
 		{
-			return 0;
+			return;
 		}
 		a_stack.pop();
-		return 1;
 	}
 
-	bool Instructions::PUSH(std::stack<int32_t>& a_stack, int32_t a_data)
+	int Instructions::PUSH(std::stack<int32_t>& a_stack, int32_t a_data)
 	{
 		a_stack.push(a_data);
-		return 1;
+		return -1;
 	}
 
-	bool Instructions::DUP(std::stack<int32_t>& a_stack)
+	void Instructions::DUP(std::stack<int32_t>& a_stack)
 	{
 		if (a_stack.empty())
 		{
-			return 0;
+			return;
 		}
-
 		a_stack.push(a_stack.top());
-		return 1;
 	}
 
-	bool Instructions::ADD(std::stack<int32_t>& a_stack)
+	void Instructions::ADD(std::stack<int32_t>& a_stack)
 	{
 		if (a_stack.size() < 2)
 		{
-			return 0;
+			return;
 		}
 
 		uint32_t tmp1 = a_stack.top();
@@ -78,14 +74,13 @@ namespace tiny_machine
 		a_stack.pop();
 
 		a_stack.push(tmp1 + tmp2);
-		return 1;
 	}
 
-	bool Instructions::SUB(std::stack<int32_t>& a_stack)
+	void Instructions::SUB(std::stack<int32_t>& a_stack)
 	{
 		if (a_stack.size() < 2)
 		{
-			return 0;
+			return;
 		}
 
 		uint32_t tmp1 = a_stack.top();
@@ -94,14 +89,13 @@ namespace tiny_machine
 		a_stack.pop();
 
 		a_stack.push(tmp1 - tmp2);
-		return 1;
 	}
 
-	bool Instructions::MUL(std::stack<int32_t>& a_stack)
+	void Instructions::MUL(std::stack<int32_t>& a_stack)
 	{
 		if (a_stack.size() < 2)
 		{
-			return 0;
+			return;
 		}
 
 		uint32_t tmp1 = a_stack.top();
@@ -110,14 +104,13 @@ namespace tiny_machine
 		a_stack.pop();
 
 		a_stack.push(tmp1 * tmp2);
-		return 1;
 	}
 
-	bool Instructions::DIV(std::stack<int32_t>& a_stack)
+	void Instructions::DIV(std::stack<int32_t>& a_stack)
 	{
 		if (a_stack.size() < 2)
 		{
-			return 0;
+			return;
 		}
 
 		uint32_t tmp1 = a_stack.top();
@@ -126,22 +119,20 @@ namespace tiny_machine
 		if (a_stack.top() == 0)
 		{
 			a_stack.push(tmp1);
-			return 0;
+			return;
 		}
 
 		uint32_t tmp2 = a_stack.top();
 		a_stack.pop();
 
 		a_stack.push(tmp1 / tmp2);
-
-		return 1;
 	}
 
-	bool Instructions::SWAP(std::stack<int32_t>& a_stack)
+	void Instructions::SWAP(std::stack<int32_t>& a_stack)
 	{
 		if (a_stack.size() < 2)
 		{
-			return 0;
+			return;
 		}
 
 		uint32_t tmp1 = a_stack.top();
@@ -151,14 +142,13 @@ namespace tiny_machine
 
 		a_stack.push(tmp1);
 		a_stack.push(tmp2);
-		return 1;
 	}
 
-	bool Instructions::PRINT(std::stack<int32_t> a_stack)
+	void Instructions::PRINT(std::stack<int32_t> a_stack)
 	{
 		if (a_stack.empty())
 		{
-			return 0;
+			return;
 		}
 
 		std::stack<int32_t> reverse_stack;
@@ -188,52 +178,45 @@ namespace tiny_machine
 		}
 
 		std::cout << std::endl;
-
-		return 1;
 	}
 
-	bool Instructions::PRINTC(std::stack<int32_t>& a_stack)
+	void Instructions::PRINTC(std::stack<int32_t>& a_stack)
 	{
 		if (a_stack.empty())
 		{
-			return 0;
+			return;
 		}
 		std::cout << char(a_stack.top()) << std::endl;
-		return 1;
 	}
 
-	bool Instructions::NOP()
+	void Instructions::NOP()
 	{
-		return 1;
 	}
 
-	bool Instructions::HALT()
+	void Instructions::HALT()
 	{
-		return 1;
 	}
 
-	bool Instructions::INC(std::stack<int32_t>& a_stack)
+	void Instructions::INC(std::stack<int32_t>& a_stack)
 	{
 		if (a_stack.empty())
 		{
-			return 0;
+			return;
 		}
 		uint32_t tmp = a_stack.top();
 		a_stack.pop();
 		a_stack.push(++tmp);
-		return 1;
 	}
 
-	bool Instructions::DEC(std::stack<int32_t>& a_stack)
+	void Instructions::DEC(std::stack<int32_t>& a_stack)
 	{
 		if (a_stack.empty())
 		{
-			return 0;
+			return;
 		}
 		uint32_t tmp = a_stack.top();
 		a_stack.pop();
 		a_stack.push(--tmp);
-		return 1;
 	}
 
 	int32_t Instructions::JMP(std::stack<int32_t>& a_stack, int32_t a_data)
@@ -256,7 +239,7 @@ namespace tiny_machine
 		return -1;
 	}
 
-	int32_t Instructions::JNP(std::stack<int32_t>& a_stack, int32_t a_data)
+	int32_t Instructions::JNZ(std::stack<int32_t>& a_stack, int32_t a_data)
 	{
 		if (a_stack.empty())
 		{

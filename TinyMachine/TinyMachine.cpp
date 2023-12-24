@@ -20,22 +20,32 @@ namespace tiny_machine
             return static_cast<int32_t>(a_value);
         }
     }
-    bool TinyMachine::CommandWithArgument(uint32_t a_opcode, uint32_t a_value)
+
+    int TinyMachine::CommandWithArgument(uint32_t a_opcode, uint32_t a_value)
     {
-        bool success;
+        int result;
         Codes code = static_cast<Codes>(a_opcode);
         int32_t a_data = convertTwosComplementToInt(a_value);
 
         switch (code)
         {
         case Codes::PUSH:
-            success = v_instructions.PUSH(v_stack, a_data);
+            result = v_instructions.PUSH(v_stack, a_data);
+            break;
+        case Codes::JMP:
+            result = v_instructions.JMP(v_stack, a_data);
+            break;
+        case Codes::JZ:
+            result = v_instructions.JZ(v_stack, a_data);
+            break;
+        case Codes::JNZ:
+            result = v_instructions.JNZ(v_stack, a_data);
             break;
         default:
-            success = 0;
+            result = -1;
             break;
         }
-        return success;
+        return result;
     }
 
     bool TinyMachine::CommandWithNoArgument(uint32_t a_opcode)
@@ -134,6 +144,7 @@ namespace tiny_machine
 
     void TinyMachine::runCommandsFromVector()
     {
+        int jumpStatus;
         for (int i = 0; i < v_bits.size(); i++)
         {
             uint32_t MSB = GetMSB(v_bits[i]);
@@ -147,8 +158,15 @@ namespace tiny_machine
                 {
                     return;
                 }
-                CommandWithArgument(v_bits[i], v_bits[i+1]);
-                i++;
+                jumpStatus = CommandWithArgument(v_bits[i], v_bits[i + 1])l
+                if (jumpStatus != -1)
+                {
+                    i = jumpStatus;
+                }
+                else
+                {
+                    i++;
+                }
             }
         }
     }
