@@ -27,7 +27,6 @@ namespace tiny_machine
         int status = -1;
         Codes code = static_cast<Codes>(a_opcode);
         int32_t a_data = convertTwosComplementToInt(a_value);
-
         switch (code)
         {
         case Codes::PUSH:
@@ -45,10 +44,6 @@ namespace tiny_machine
         case Codes::CALL:
             status = v_instructions.CALL(v_stack, a_data, v_index);
             v_bits.push_back(opcodes["RET"]);
-            break;
-        case Codes::RET:
-            status = v_instructions.RET();
-            v_bits.pop_back();
             break;
         default:
             status = -1;
@@ -103,6 +98,10 @@ namespace tiny_machine
         case Codes::DEC:
             v_instructions.DEC(v_stack);
             break;
+        case Codes::RET:
+            v_index = v_instructions.RET();
+            v_bits.pop_back();
+            break;
         default:
             return 0;
             break;
@@ -146,16 +145,15 @@ namespace tiny_machine
     void TinyMachine::runCommandsFromVector()
     {
         int32_t jumpStatus;
-        for (v_index = 0; v_index < v_bits.size(); v_index++)
+        for (v_index = 0; v_index <= v_bits.size(); v_index++)
         {
             uint32_t MSB = GetMSB(v_bits[v_index]);
-
             if (MSB == 1) //no argument 01
             {
                 CommandWithNoArgument(v_bits[v_index]);
                 if (v_halt)
                 {
-                    break;
+                    return;
                 }
             }
             else if (MSB == 2) // with argument 10
@@ -164,7 +162,6 @@ namespace tiny_machine
                 {
                     return;
                 }
-
                 jumpStatus = CommandWithArgument(v_bits[v_index], v_bits[v_index + 1]);
                 if (jumpStatus != -1)
                 {
@@ -174,6 +171,7 @@ namespace tiny_machine
                 {
                     v_index++;
                 }
+
             }
         }
     }
@@ -319,33 +317,24 @@ void createBinTest3()
 
     file.write(reinterpret_cast<const char*>(&tm.opcodes["PUSH"]), sizeof(uint32_t));
     file.write(reinterpret_cast<const char*>(&t1), sizeof(uint32_t));
-    file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINT"]), sizeof(uint32_t));
 
     file.write(reinterpret_cast<const char*>(&tm.opcodes["CALL"]), sizeof(uint32_t));
     file.write(reinterpret_cast<const char*>(&nine), sizeof(uint32_t)); 
-    file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINT"]), sizeof(uint32_t));
 
     file.write(reinterpret_cast<const char*>(&tm.opcodes["NOP"]), sizeof(uint32_t));
-    file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINT"]), sizeof(uint32_t));
 
     file.write(reinterpret_cast<const char*>(&tm.opcodes["CALL"]), sizeof(uint32_t));
     file.write(reinterpret_cast<const char*>(&nine), sizeof(uint32_t));
-    file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINT"]), sizeof(uint32_t));
 
     file.write(reinterpret_cast<const char*>(&tm.opcodes["NOP"]), sizeof(uint32_t));
-    file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINT"]), sizeof(uint32_t));
 
     file.write(reinterpret_cast<const char*>(&tm.opcodes["HALT"]), sizeof(uint32_t));
-    file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINT"]), sizeof(uint32_t));
 
     file.write(reinterpret_cast<const char*>(&tm.opcodes["NOP"]), sizeof(uint32_t));
-    file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINT"]), sizeof(uint32_t));
 
     file.write(reinterpret_cast<const char*>(&tm.opcodes["INC"]), sizeof(uint32_t));
-    file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINT"]), sizeof(uint32_t));
 
     file.write(reinterpret_cast<const char*>(&tm.opcodes["DUP"]), sizeof(uint32_t));
-    file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINT"]), sizeof(uint32_t));
 
     file.write(reinterpret_cast<const char*>(&tm.opcodes["PRINTC"]), sizeof(uint32_t));
 

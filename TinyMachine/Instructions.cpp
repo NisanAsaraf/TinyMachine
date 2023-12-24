@@ -278,16 +278,12 @@ namespace tiny_machine
 
 	int32_t Instructions::CALL(std::stack<int32_t>& a_stack, int32_t a_data, size_t a_ret)
 	{
-		if (a_stack.empty())
+		if (a_data < 0)
 		{
 			return -1;
 		}
 
-		if (a_data > a_stack.size() || a_data < 0)
-		{
-			return -1;
-		}
-		v_retIndex = a_ret;
+		v_retIndex = a_ret + 1;
 		return a_data;
 	}
 

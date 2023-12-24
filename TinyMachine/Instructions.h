@@ -27,8 +27,7 @@ enum class Codes : uint32_t
 	JZ		=	0b10000000000000000000000000010000,
 	JNZ		=	0b10000000000000000000000000010001,
 	CALL	=	0b10000000000000000000000000010010,
-	RET		=	0b10000000000000000000000000010011
-
+	RET		=	0b01000000000000000000000000001111
 };
 
 std::unordered_map<std::string, uint32_t> createOpCodesMap();
@@ -60,7 +59,7 @@ public:
 	int32_t CALL(std::stack<int32_t>& a_stack, int32_t a_data, size_t a_ret);
 	int32_t RET();
 private:
-	size_t v_retIndex;
+	int32_t v_retIndex;
 };
 }//namespace tiny_machine
 #endif
