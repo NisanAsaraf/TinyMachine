@@ -23,6 +23,7 @@ public:
 private:
 	std::vector<uint32_t> v_bits;
 	std::stack<int32_t> v_stack;
+	bool v_halt;
 	Instructions v_instructions;
 	size_t v_index;
 };
