@@ -7,7 +7,6 @@ namespace tiny_machine
     TinyMachine::TinyMachine()
     {
         opcodes = createOpCodesMap();
-        halt = false;
     }
 
     int32_t convertTwosComplementToInt(uint32_t a_value)
@@ -140,31 +139,31 @@ namespace tiny_machine
     void TinyMachine::runCommandsFromVector()
     {
         int32_t jumpStatus;
-        for (int i = 0; i < v_bits.size(); i++)
+        for (v_index = 0; v_index < v_bits.size(); v_index++)
         {
-            uint32_t MSB = GetMSB(v_bits[i]);
+            uint32_t MSB = GetMSB(v_bits[v_index]);
             if (MSB == 1) //no argument 01
             {
-                if (CommandWithNoArgument(v_bits[i]) == -1)//only happens when HALT happens
+                if (CommandWithNoArgument(v_bits[v_index]) == -1)//only happens when HALT happens
                 {
                     break;
                 }
             }
             else if (MSB == 2) // with argument 10
             {
-                if (i + 1 >= v_bits.size())
+                if (v_index + 1 >= v_bits.size())
                 {
                     return;
                 }
 
-                jumpStatus = CommandWithArgument(v_bits[i], v_bits[i + 1]);
+                jumpStatus = CommandWithArgument(v_bits[v_index], v_bits[v_index + 1]);
                 if (jumpStatus != -1)
                 {
-                    i = jumpStatus - 1;
+                    v_index = jumpStatus - 1;
                 }
                 else
                 {
-                    i++;
+                    v_index++;
                 }
             }
         }

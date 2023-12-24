@@ -39,20 +39,20 @@ class Instructions
 public:
 	Instructions();
 
-	bool POP(std::stack<int32_t>& a_stack);
+	void POP(std::stack<int32_t>& a_stack);
 	int32_t PUSH(std::stack<int32_t>& a_stack, int32_t a_data);
-	bool DUP(std::stack<int32_t>& a_stack);
-	bool ADD(std::stack<int32_t>& a_stack);
-	bool SUB(std::stack<int32_t>& a_stack);
-	bool MUL(std::stack<int32_t>& a_stack);
-	bool DIV(std::stack<int32_t>& a_stack);
-	bool SWAP(std::stack<int32_t>& a_stack);
-	bool PRINT(std::stack<int32_t> a_stack);
-	bool PRINTC(std::stack<int32_t>& a_stack);
-	bool NOP();
+	void DUP(std::stack<int32_t>& a_stack);
+	void ADD(std::stack<int32_t>& a_stack);
+	void SUB(std::stack<int32_t>& a_stack);
+	void MUL(std::stack<int32_t>& a_stack);
+	void DIV(std::stack<int32_t>& a_stack);
+	void SWAP(std::stack<int32_t>& a_stack);
+	void PRINT(std::stack<int32_t> a_stack);
+	void PRINTC(std::stack<int32_t>& a_stack);
+	void NOP();
 	int32_t HALT();
-	bool INC(std::stack<int32_t>& a_stack);
-	bool DEC(std::stack<int32_t>& a_stack);
+	void INC(std::stack<int32_t>& a_stack);
+	void DEC(std::stack<int32_t>& a_stack);
 	int32_t JMP(std::stack<int32_t>& a_stack, int32_t a_data);
 	int32_t JZ(std::stack<int32_t>& a_stack, int32_t a_data);
 	int32_t JNZ(std::stack<int32_t>& a_stack, int32_t a_data);
